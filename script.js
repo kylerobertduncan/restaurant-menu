@@ -26,13 +26,13 @@ const menus = {
 
 // (A): function with arguments of name and array of menus
 function addMenuItem(item, addTo) {
-  // make sure the user specified an item and which menus to add the item to
-  // test that item is a string, and addTo is an array
+  // make sure the user specified an item, which menus to add the item to, that item is a string, and addTo is an array
   if (
     !item || // no item
     !addTo || // no menus
     typeof(item) !== "string" || // item is not a string
-    !Array.isArray(addTo) // menus are not an array
+    !Array.isArray(addTo) || // menus are not an array
+    addTo.length == 0 // the menu array is empty
   ) {
     console.log("Please include a valid string for the item name, and an array of existing menus");
     return;
@@ -46,27 +46,19 @@ function addMenuItem(item, addTo) {
   });
 }
 
-addMenuItem("Juice");
-addMenuItem("Hotcakes", []);
-addMenuItem("Salad", ["earlyBird"]);
-addMenuItem("Hotdog", ["allDay"]);
-addMenuItem("Lasagne", ["lunch", "dinner"])
-
-function convertTime(s) {
-  if (typeof(s)== "number")
-  // check for hh:mm format
-  if (typeof(s) == "string" && s.includes(":")) {}
-  console.log(new Date(s));
-}
-convertTime(1300)
-convertTime("11:30")
+// testing
+addMenuItem("Juice"); // "Please include a valid string for the item name, and an array of existing menus"
+addMenuItem("Salad", ["earlyBird"]); // "Please specify a valid menu. "earlyBird" is not an existing menu option."
+addMenuItem("Hotcakes", []); // // "Please include a valid string for the item name, and an array of existing menus"
+addMenuItem("Hotdog", ["allDay"]); // item appears on all valid menu responses
+addMenuItem("Lasagne", ["lunch", "dinner"]) // item appears on menu responses including lunch and dinner
 
 // (B): function with argument of the specific time of day
-// if the argument could be a string,
-// convert string (e.g. "10:30") to number (10.5)
 function getMenu(time) {
-  const availableMenus = [];
+  // make sure the argument is a valid number
+  if (typeof(time) != "number" || time < 0 || time >= 24) return(`${time} is not a valid number argument`);
   // collect the menus availabe at the given time
+  const availableMenus = [];
   for(const m in menus) {
     const [ start, end ] = menus[m].hours;
     if (time >= start && time < end) availableMenus.push(m);
@@ -89,8 +81,10 @@ function getMenu(time) {
   }
 }
 
+console.log("Menu at 9am:", getMenu("9am"));
 console.log("Menu at 9am:", getMenu(9));
 console.log("Menu at 1pm:", getMenu(13));
+console.log("Menu at 4pm:", getMenu(44));
 console.log("Menu at 4pm:", getMenu(16));
 console.log("Menu at 7pm:", getMenu(19));
 console.log("Menu at 10pm:", getMenu(22));
