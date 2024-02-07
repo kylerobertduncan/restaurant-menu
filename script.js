@@ -3,6 +3,9 @@ You are hired by a restaurant to handle their menu and ordering system. Use what
 They have 4 menus: breakfast (8-11), lunch (12-16), dinner(16-20), and all-day (8-20).
 A) You should have a method to add a named dish to an array of menus (i.e., "Pancakes" are available on the Breakfast and Lunch menus)
 B) You should have a method that gives you the available dishes for a specific time of day
+C) A customer should be able to make a food order
+D) I should have a way to retrieve the oldest outstanding order
+E) I should be able to remove a food order once it is complete
 */
 
 const menus = {
@@ -88,3 +91,49 @@ console.log("Menu at 4pm:", getMenu(44));
 console.log("Menu at 4pm:", getMenu(16));
 console.log("Menu at 7pm:", getMenu(19));
 console.log("Menu at 10pm:", getMenu(22));
+
+const orders = []
+
+// example orders
+const order = {
+  order: ["Pancakes", "Coffee"],
+  time: Date.now(),
+};
+const order2 = {
+	order: ["Pancakes", "Hotdog"],
+	time: Date.now(),
+};
+const order3 = {
+	order: ["Pancakes", "Coffee"],
+	time: Date.now()-1,
+};
+// add example orders
+orders.push(order, order2, order3);
+
+function makeOrder(items) {
+  const order = {
+    // add a unique id here for easier reference, in e.g. removeOrder
+    items: [...items],
+    time: Date.now(),
+  }
+  orders.push(order);
+  console.log("added an order", orders);
+}
+makeOrder(["Pie", "Coffee"]);
+
+function getOldestOrder() {
+  orders.sort((a,b) => a.time - b.time);
+  console.log("sorted orders by date", orders);
+  return orders[0];
+}
+console.log(getOldestOrder());
+
+function removeOrder(completedOrder) {
+  const i = orders.findIndex((o) => o == completedOrder);
+  orders.splice(i, 1);
+  console.log("removed order", completedOrder, orders);
+}
+removeOrder(order2);
+
+
+
